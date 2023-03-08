@@ -12,23 +12,7 @@ const r = new Snoowrap({
     password: process.env.REDDIT_PASS,
 });
 
-// const client = new Snoostorm(r);
-
-// // Configure options for stream: subreddit & results per query
-// const streamOpts = {
-//     subreddit: 'movies',
-//     results: 25
-// };
-
-// Search for posts in a subreddit
-// const results = r
-//     .getSubreddit("movies")
-//     .search({ query: "Official Discussion AND Dune AND [SPOILERS]", sort: "comments" })
-//     .map(post => post.name)
-//     .getSubmission()
-//     .then(console.log);
-
-const getPost = async (searchQuery) => {
+export const getPost = async (searchQuery) => {
     const subreddit = await r.getSubreddit("movies");
     const posts = await subreddit.search({
         query: `Official Discussion [SPOILERS] thread ${searchQuery}`,
@@ -41,18 +25,61 @@ const getPost = async (searchQuery) => {
 
     // Now lets find the submission
     const postID = posts[0].id;
-    const submission = await r.getSubmission(postID)
+    const submission = await r.getSubmission(postID);
 
-    const firstComment = await submission.comments[0]
+    let comments = []
 
-    // console.log(firstComment.body)
+    submission.comments.forEach(async(comment) => {
+        // console.log(
+        //     "==========================================================\n"
+        // );
+        // console.log(comment.body);
+        // console.log("\n-" + (comment.author.name || "Anon"));
 
-    submission.comments.forEach((x) => {
-        console.log("==========================================================\n")
-        
-        console.log(x.body);
-        console.log("\n-" + (x.author.name || "Anon"))
+        let commentObj = {
+            message: comment.body || "No response",
+            author: comment.author.name || "Anon",
+            score: comment.score || 1,
+            date: comment.created || "unknown",
+            replies: []
+        }
+
+
+        comment.replies.forEach(async(reply) => {
+            // console.log("\t\t--------------------\n");
+            // console.log("\t\t" + reply.body);
+            // console.log("\n\t\t-" + (reply.author.name || "Anon"));
+            const replyObj = {
+                message: reply.body || "No response",
+                author: reply.author.name || "Anon",
+                score: reply.score || 1,
+                date: reply.created || "unknown"
+            }
+
+            await comment.replies.push(replyObj)
+        });
+
+        // console.log(commentObj)
+
+        await comments.push(commentObj)
+
     });
+
+    
 };
 
-getPost("Dune");
+const comments = getPost("Dune")
+
+console.log(comments)
+
+
+// fs.appendFile("data.txt", JSON.stringify(x), function (err) {
+//     if (err) {
+//         // append failed
+//         console.log(err);
+//     } else {
+//         // done
+//         return;
+//     }
+// });
+// return;
