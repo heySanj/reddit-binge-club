@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "../../.env" });
 
+window.global = window
+
 import Snoowrap from "snoowrap";
 
 // Build Snoowrap and Snoostorm clients
