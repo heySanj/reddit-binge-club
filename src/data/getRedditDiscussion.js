@@ -1,5 +1,7 @@
 // https://www.reddit.com/r/movies/search.json?q=Dune%20Discussion%20Official%20[SPOILERS]&sort=relevance&limit=5
 
+import { useCallback } from "react"
+
 const SUBREDDIT = "movies"
 const SORT = "relevance"
 const RESULTS = 5
@@ -12,7 +14,7 @@ const COMMENT_DEPTH = 2
 const COMMENT_SORT = "top"
 const COMMENT_LIMIT = 10
 
-export const getDiscussion = async (title) => {
+export const getDiscussion = (async (title) => {
     
     // Use reddit search to find the discussion thread
     const searchResponse = await fetch(`https://www.reddit.com/r/${SUBREDDIT}/search.json?q=${title}${SEARCH_TAGS}&sort=${SORT}&limit=${RESULTS}`)
@@ -43,4 +45,4 @@ export const getDiscussion = async (title) => {
 
     return topLevelComments
 
-}
+})

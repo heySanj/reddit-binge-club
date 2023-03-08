@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 
-import { getDiscussion } from "./data/getRedditDiscussion";
+
+import useHttp from "./hooks/use-http";
 
 function App() {
     const [count, setCount] = useState(0);
 
     const [comments, setComments] = useState([]);
 
+    const { isLoading, error, getDiscussion } = useHttp();
+
+    // Fetch comments on load
     useEffect(() => {
-      setComments(getDiscussion("Dune"))
-    }, []);
+        const loadedComments = getDiscussion("Dune", setComments);
+    }, [getDiscussion]);
 
     return (
         <div className="App">
@@ -42,7 +46,7 @@ function App() {
             <h1>Dune Discussion</h1>
             <ul>
                 {comments && comments.map((comment) => (
-                    <li>
+                    <li key={comment.id}>
                         <h2>{comment.body}</h2>
                         <h4>{comment.author}    /  {comment.score}</h4>
                     </li>
