@@ -5,26 +5,35 @@ import "./App.css";
 import useHttp from "./hooks/use-http";
 
 import CommentList from "./components/CommentList";
+import MovieSearch from "./components/MovieSearch";
 
 function App() {
     const [count, setCount] = useState(0);
 
-    const [comments, setComments] = useState([]);
+    const [threadData, setThreadData] = useState([]);
 
     const { isLoading, error, getDiscussion } = useHttp();
 
     // Fetch comments on load
-    useEffect(() => {
-        const loadedComments = getDiscussion("Dune", setComments);
-    }, [getDiscussion]);
+    // useEffect(() => {
+    //     const loadedComments = getDiscussion("Dune", setComments);
+    // }, [getDiscussion]);
+
+    const findDiscussion = (searchTerm) => {
+        getDiscussion(searchTerm, setThreadData);
+    };
 
     return (
         <div
             className="container mx-auto p-12 text-center
                       font-mono text-white"
         >
-            <h1 className="text-5xl font-black">Dune Discussion</h1>
-            <CommentList commentsData={comments}/>
+            <MovieSearch findDiscussionHandler={findDiscussion} />
+            <div className="pt-12">
+                <h1 className="text-3xl font-black">{threadData.title}</h1>
+                <a href={threadData.url}>See Full Thread</a>
+                <CommentList commentsData={threadData.comments} />
+            </div>
         </div>
     );
 }

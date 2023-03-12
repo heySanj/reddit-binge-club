@@ -53,6 +53,7 @@ const useHttp = () => {
             // Drill down the data into the first Thread
             const thread = searchResults.data.children[0];
 
+            // console.log(thread)
             // console.log(thread.data.title)
             // console.log(thread.data.url)
 
@@ -77,7 +78,12 @@ const useHttp = () => {
             });
 
             // Save the data
-            applyData(topLevelComments)
+            const threadData = {
+                title: thread.data.title,
+                url: thread.data.url,
+                comments: topLevelComments
+            }
+            applyData(threadData)
 
         } catch (error) {
             setError(err.message || "Something went wrong!");

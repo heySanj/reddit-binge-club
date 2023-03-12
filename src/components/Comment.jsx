@@ -3,7 +3,7 @@ const Comment = ({ comment }) => {
         <li
             className="my-6 rounded-md bg-slate-700 p-4
                     text-left shadow-lg"
-            key={comment.id}
+            
         >
             <div className="flex items-center">
                 <h4 className="font-extrabold text-sm pr-2">{comment.author}</h4>
