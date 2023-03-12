@@ -46,7 +46,7 @@ const useHttp = () => {
         try {
             // Use reddit search to find the discussion thread
             const searchResponse = await fetch(
-                `https://www.reddit.com/r/${SUBREDDIT}/search.json?q=${title}${SEARCH_TAGS}&sort=${SORT}&limit=${RESULTS}`
+                `https://www.reddit.com/r/${SUBREDDIT}/search.json?q=flair%3ADiscussion+${title}${SEARCH_TAGS}&sort=${SORT}&limit=${RESULTS}`
             );
             const searchResults = await searchResponse.json();
 
