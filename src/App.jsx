@@ -26,14 +26,23 @@ function App() {
     return (
         <div
             className="container mx-auto p-12 text-center
-                      font-mono text-white"
+                       text-primary"
         >
             <MovieSearch findDiscussionHandler={findDiscussion} />
-            <div className="pt-12">
-                <h1 className="text-3xl font-black">{threadData.title}</h1>
-                <a href={threadData.url}>See Full Thread</a>
-                <CommentList commentsData={threadData.comments} />
-            </div>
+
+            {threadData.title && (
+                <div className="pt-12">
+                    <h1 className="text-3xl font-black py-4">{threadData.title}</h1>
+                    <a
+                        className="btn-outline btn-accent btn-xs btn"
+                        href={threadData.url}
+                    >
+                        See Full Thread
+                    </a>
+
+                    <CommentList commentsData={threadData.comments} />
+                </div>
+            )}
         </div>
     );
 }
