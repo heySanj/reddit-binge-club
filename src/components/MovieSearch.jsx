@@ -24,10 +24,10 @@ const MovieSearch = ({ findDiscussionHandler }) => {
                         onChange={handleChange}
                         value={searchTerm}
                     />
-                    <button type="submit" className="btn-square btn">
+                    <button type="submit" className="btn-square btn hover:bg-primary transition-all group">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
+                            className="h-6 w-6 group-hover:text-base-100 transition-all"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"

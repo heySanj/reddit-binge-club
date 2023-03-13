@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 const SUBREDDIT = "movies";
 const SORT = "relevance";
 const RESULTS = 5;
-const SEARCH_TAGS = " Discussion Official [SPOILERS]";
+const SEARCH_TAGS = " discussion self:true -title:megathread";
 
 // Comment Depth will return a reply chain up to this number
 // To get more 'sibling' replies, you need to call the morechildren api
@@ -22,9 +22,23 @@ const useHttp = () => {
         try {
             // Use reddit search to find the discussion thread
             const searchResponse = await fetch(
-                `https://www.reddit.com/r/${SUBREDDIT}/search.json?q=flair%3ADiscussion+${title}${SEARCH_TAGS}&sort=${SORT}&limit=${RESULTS}`
+                `https://www.reddit.com/r/${SUBREDDIT}/search.json?q=${title}${SEARCH_TAGS}&sort=${SORT}&limit=${RESULTS}&restrict_sr=on`
             );
             const searchResults = await searchResponse.json();
+           
+            // Create the search results
+            const threadList = []
+
+            searchResults.data.children.forEach((thread) => {
+                const threadObj = {
+                    id: thread.data.id,
+                    title: thread.data.title,
+                    url: thread.data.url,
+                    score: thread.data.score,
+                    subreddit: thread.data.subreddit
+                }
+                threadList.push(threadObj)
+            })
 
             // Drill down the data into the first Thread
             const thread = searchResults.data.children[0];
@@ -57,7 +71,8 @@ const useHttp = () => {
             const threadData = {
                 title: thread.data.title,
                 url: thread.data.url,
-                comments: topLevelComments
+                comments: topLevelComments,
+                allResults: threadList
             }
             applyData(threadData)
 
