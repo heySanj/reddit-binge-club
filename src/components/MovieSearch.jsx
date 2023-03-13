@@ -1,48 +1,71 @@
 import { useState } from "react";
 
-const MovieSearch = ({ findDiscussionHandler }) => {
-    const [searchTerm, setSearchTerm] = useState("");
+import SearchInput from "./SearchInput";
+import SearchResults from "./SearchResults";
+import useGetDiscussion from "../hooks/use-get-discussions";
+import useGetComments from "../hooks/use-get-comments";
+import CommentList from "./CommentList";
+import LoadingSpinner from "./UI/LoadingSpinner";
+import Alert from "./UI/Alert";
 
-    const submitHandler = (event) => {
-        event.preventDefault();
-        findDiscussionHandler(searchTerm);
-        setSearchTerm("");
+const MovieSearch = () => {
+    const [discussions, setDiscussions] = useState([]);
+    const [comments, setComments] = useState({});
+
+    const {
+        isLoading: resultsLoading,
+        error: resultsError,
+        getDiscussions,
+    } = useGetDiscussion();
+    const {
+        isLoading: commentsLoading,
+        error: commentsError,
+        getComments,
+    } = useGetComments();
+
+    const findDiscussions = (searchTerm) => {
+        setDiscussions([]);
+        getDiscussions(searchTerm, setDiscussions);
     };
 
-    const handleChange = (event) => {
-        setSearchTerm(event.target.value);
+    const loadComments = (thread) => {
+        setComments({})
+        getComments(thread, setComments);
     };
+
 
     return (
-        <form onSubmit={submitHandler}>
-            <div className="form-control">
-                <div className="input-group">
-                    <input
-                        type="text"
-                        placeholder="Search Movie Discussions"
-                        className="input-bordered input flex-auto"
-                        onChange={handleChange}
-                        value={searchTerm}
-                    />
-                    <button type="submit" className="btn-square btn hover:bg-primary transition-all group">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 group-hover:text-base-100 transition-all"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+        <>
+            <SearchInput findDiscussionHandler={findDiscussions} />
+            {discussions.length > 0 && (
+                <SearchResults
+                    threads={discussions}
+                    commentLoader={loadComments}
+                />
+            )}
+            {resultsError && <Alert colour="alert-error" message={resultsError}/>}
+            {resultsLoading && <LoadingSpinner />}
+
+            {JSON.stringify(comments) !== "{}" && (
+                <>
+                    <div className="pt-12">
+                        <h3 className="py-4 text-3xl font-bold text-warning">
+                            {comments.title}
+                        </h3>
+                        <a
+                            className="btn-outline btn-accent btn-xs btn"
+                            href={comments.url}
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </form>
+                            See Full Thread
+                        </a>
+
+                        <CommentList commentsData={comments.comments} />
+                    </div>
+                </>
+            )}
+            {commentsError && <Alert colour="alert-error" message={commentsError}/>}
+            {commentsLoading && <LoadingSpinner />}
+        </>
     );
 };
 
