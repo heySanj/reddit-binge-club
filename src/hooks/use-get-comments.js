@@ -44,7 +44,8 @@ const useGetComments = () => {
             applyData(threadData)
 
         } catch (error) {
-            setError(error.message || "Could not retrieve comments from the provided URL!");
+            const text = "Could not retrieve comments from the provided URL!"
+            setError(error.message + ": "+ text || text);
         }
         setIsLoading(false);
     }, []);

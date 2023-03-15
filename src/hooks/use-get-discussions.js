@@ -38,7 +38,8 @@ const useGetDiscussion = () => {
             applyData(threadList)
 
         } catch (error) {
-            setError(error.message || "Could not retrieve dicussion threads from Reddit!");
+            const text = "Could not retrieve dicussion threads from Reddit!"
+            setError(error.message + ": "+ text || text);
         }
         setIsLoading(false);
     }, []);

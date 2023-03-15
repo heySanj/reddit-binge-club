@@ -11,7 +11,8 @@ function App() {
         >
             <a
                 href="/"
-                className="my-6 inline-block text-6xl font-black transition-all hover:text-yellow-400"
+                className="my-6 inline-block text-6xl font-black transition-all
+                 hover:text-yellow-400"
             >
                 Reddit Binge Club
             </a>
