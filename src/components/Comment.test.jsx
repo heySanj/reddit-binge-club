@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from "@testing-library/react";
 import Comment from "./Comment";
 
@@ -11,7 +12,7 @@ describe("Comment Component", () => {
         score: 243,
     };
 
-    test("renders the author of a comment.", () => {
+    it("renders the author of a comment.", () => {
         
         // Arrange
         render(<Comment key={comment.id} comment={comment} />);
@@ -20,9 +21,9 @@ describe("Comment Component", () => {
 
         // Assert
         const author = screen.getByTestId("comment-author");
-        expect(author).toEqual(comment.author);
+        expect(author.textContent).toBe(comment.author);
     });
-    test("renders the score of a comment.", () => {
+    it("renders the score of a comment.", () => {
         // Arrange
         render(<Comment key={comment.id} comment={comment} />);
 
@@ -30,9 +31,9 @@ describe("Comment Component", () => {
 
         // Assert
         const score = screen.getByTestId("comment-score");
-        expect(score).toEqual(comment.score);
+        expect(score.textContent).toBe("- " + comment.score + " points");
     });
-    test("renders the body of a comment.", () => {
+    it("renders the body of a comment.", () => {
         // Arrange
         render(<Comment key={comment.id} comment={comment} />);
 
@@ -40,6 +41,6 @@ describe("Comment Component", () => {
 
         // Assert
         const body = screen.getByTestId("comment-body");
-        expect(body).toEqual(comment.body);
+        expect(body.textContent).toBe(comment.body);
     });
 });
